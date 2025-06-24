@@ -8,12 +8,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "users")
 public class User extends Auditable {
     @Id
@@ -33,5 +35,11 @@ public class User extends Auditable {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<LeaveRequest> leaveRequests;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private LeaveBalance leaveBalance;
 
 }
