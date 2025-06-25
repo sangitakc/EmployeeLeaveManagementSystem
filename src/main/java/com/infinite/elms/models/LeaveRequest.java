@@ -19,6 +19,7 @@ public class LeaveRequest extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDate startDate;
 
     private LocalDate requestDate;
 
@@ -39,9 +40,9 @@ public class LeaveRequest extends Auditable {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
-    private User employee;
+    private Users employee;
 
     @ManyToOne
     @JoinColumn(name = "approver_id")
-    private User approver;
+    private Users approver;
 }

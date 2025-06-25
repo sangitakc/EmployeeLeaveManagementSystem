@@ -12,6 +12,10 @@ import java.time.LocalDate;
 public class LeaveRequestDTO {
     @NotNull(message = "Start date is required")
     @FutureOrPresent(message = "Start date cannot be in the past")
+    private LocalDate startDate;
+
+    @NotNull(message = "Start date is required")
+    @FutureOrPresent(message = "Start date cannot be in the past")
     private LocalDate endDate;
 
     @NotNull(message = "Leave type is required")
