@@ -1,9 +1,7 @@
 package com.infinite.elms.dtos;
-
 import com.infinite.elms.constants.LeaveStatus;
 import com.infinite.elms.constants.LeaveType;
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Getter

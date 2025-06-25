@@ -1,11 +1,9 @@
 package com.infinite.elms.dtos;
-
 import com.infinite.elms.constants.LeaveType;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-
 import java.time.LocalDate;
 
 @Data

@@ -17,7 +17,7 @@ public class LeavePolicy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private LeaveType leaveType;
 
@@ -26,4 +26,5 @@ public class LeavePolicy {
 
     @Column(nullable = false)
     private Integer policyYear;
+
 }

@@ -1,5 +1,4 @@
 package com.infinite.elms.dtos;
-
 import com.infinite.elms.constants.LeaveStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
