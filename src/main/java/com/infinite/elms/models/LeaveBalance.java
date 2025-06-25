@@ -23,7 +23,7 @@ public class LeaveBalance extends Auditable {
     @OneToOne
     @MapsId
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users user;
 
     @ElementCollection
     @CollectionTable(name = "leave_balances_per_employee", joinColumns = @JoinColumn(name = "leave_balance_id"))

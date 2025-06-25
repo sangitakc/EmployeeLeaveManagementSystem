@@ -3,10 +3,7 @@ package com.infinite.elms.models;
 import com.infinite.elms.utils.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,10 +11,11 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "users")
-public class User extends Auditable {
+public class Users extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
