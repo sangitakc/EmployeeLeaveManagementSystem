@@ -6,9 +6,10 @@ import lombok.Data;
 
 @Data
 public class AdminDecisionDTO {
+
     @NotNull(message = "Status is required")
     private LeaveStatus status;
 
-    @Size(max = 500, message = "Comment cannot exceed 500 characters")
+    @NotNull(message = "Comment is required")
     private String comment;
 }

@@ -1,15 +1,15 @@
 package com.infinite.elms.dtos;
+
 import com.infinite.elms.constants.LeaveStatus;
 import com.infinite.elms.constants.LeaveType;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LeaveRequestResponseDTO {
+public class PendingLeaveRequestDTO {
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -19,7 +19,4 @@ public class LeaveRequestResponseDTO {
     private Long employeeId;
     private String employeeName;
     private LocalDate requestDate;
-    private LocalDate decisionDate;
-    private Long approverId;
-    private String decisionComment;
 }

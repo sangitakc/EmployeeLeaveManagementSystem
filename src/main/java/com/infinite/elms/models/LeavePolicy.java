@@ -8,10 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "leave_policy")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "leave_policy")
 @Builder
 public class LeavePolicy {
 
@@ -19,6 +19,8 @@ public class LeavePolicy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private LeaveType leaveType;
 
     @Column(nullable = false)
@@ -26,5 +28,4 @@ public class LeavePolicy {
 
     @Column(nullable = false)
     private Integer policyYear;
-
 }

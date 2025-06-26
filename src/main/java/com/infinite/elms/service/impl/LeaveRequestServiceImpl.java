@@ -1,10 +1,12 @@
 package com.infinite.elms.service.impl;
-
-
 import com.infinite.elms.constants.LeaveStatus;
 import com.infinite.elms.constants.LeaveType;
 import com.infinite.elms.dtos.LeaveRequestDTO;
 import com.infinite.elms.dtos.LeaveRequestResponseDTO;
+import com.infinite.elms.dtos.PendingLeaveRequestDTO;
+import com.infinite.elms.exception.customException.InsufficientLeaveBalanceException;
+import com.infinite.elms.exception.customException.LeaveRequestAlreadyReviewedException;
+import com.infinite.elms.exception.customException.ResourceNotFoundException;
 import com.infinite.elms.models.LeaveBalance;
 import com.infinite.elms.models.LeaveRequest;
 import com.infinite.elms.models.Users;
@@ -37,7 +39,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     public void submitLeaveRequest(String userEmail, LeaveRequestDTO dto) {
         log.info("Submitting leave request for user: {}", userEmail);
         Users employee = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("Employee not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
         if (dto.getEndDate().isBefore(dto.getStartDate())) {
             log.warn("Invalid date range: startDate={} endDate={}", dto.getStartDate(), dto.getEndDate());
@@ -63,15 +65,15 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     public void reviewLeaveRequest(Long requestId, LeaveStatus status, String comment, String approverEmail) {
         log.info("Reviewing leave request ID: {} by approver: {}", requestId, approverEmail);
         LeaveRequest request = leaveRequestRepository.findById(requestId)
-                .orElseThrow(() -> new RuntimeException("Leave request not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Leave request with ID " + requestId + " not found"));
 
         if (request.getStatus()!= LeaveStatus.PENDING) {
             log.warn("Leave request {} has already been reviewed", requestId);
-            throw new RuntimeException("Leave request already reviewed");
+            throw new LeaveRequestAlreadyReviewedException("Leave request already reviewed");
         }
 
         Users approver = userRepository.findByEmail(approverEmail)
-                .orElseThrow(() -> new RuntimeException("Approver not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Approver not found"));
 
         request.setStatus(status);
         request.setApprover(approver);
@@ -80,7 +82,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 
         if (status == LeaveStatus.APPROVED) {
             LeaveBalance balance = leaveBalanceRepository.findByUserId(request.getEmployee().getId())
-                    .orElseThrow(() -> new RuntimeException("Leave balance not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Leave balance for user ID " + request.getEmployee().getId() + " not found"));
 
             LeaveType type = request.getLeaveType();
             long days = ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) + 1;
@@ -89,7 +91,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
             if (currentBalance < days) {
                 log.warn("Insufficient balance: requested={} available={} type={}",
                         days, currentBalance, type);
-                throw new RuntimeException("Insufficient leave balance");
+                throw new InsufficientLeaveBalanceException("Insufficient leave balance");
             }
 
             balance.getBalances().put(type, currentBalance - (int) days);
@@ -130,4 +132,31 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PendingLeaveRequestDTO> findPendingRequest() {
+        log.info("Fetching all pending leave requests");
+
+        List<LeaveRequest> pendingRequests = leaveRequestRepository.getRequestByStatus(LeaveStatus.PENDING);
+
+        if (pendingRequests.isEmpty()) {
+            log.warn("No pending leave requests found");
+            return Collections.emptyList();
+        }
+
+        return pendingRequests.stream()
+                .map(req -> PendingLeaveRequestDTO.builder()
+                        .id(req.getId())
+                        .startDate(req.getStartDate())
+                        .endDate(req.getEndDate())
+                        .status(req.getStatus())
+                        .leaveType(req.getLeaveType())
+                        .reason(req.getReason())
+                        .employeeId(req.getEmployee().getId())
+                        .employeeName(req.getEmployee().getName())
+                        .requestDate(req.getRequestDate())
+                        .build())
+                .toList();
+    }
 }
+

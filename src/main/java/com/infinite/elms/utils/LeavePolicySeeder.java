@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class LeavePolicySeeder implements CommandLineRunner {
@@ -33,4 +34,3 @@ public class LeavePolicySeeder implements CommandLineRunner {
         System.out.println("LeavePolicy seeded for year " + year);
     }
 }
-

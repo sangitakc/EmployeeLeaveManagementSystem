@@ -2,6 +2,7 @@ package com.infinite.elms.controller;
 import com.infinite.elms.dtos.AdminDecisionDTO;
 import com.infinite.elms.dtos.LeaveRequestDTO;
 import com.infinite.elms.dtos.LeaveRequestResponseDTO;
+import com.infinite.elms.dtos.PendingLeaveRequestDTO;
 import com.infinite.elms.service.LeaveRequestService;
 import com.infinite.elms.utils.Response;
 import jakarta.validation.Valid;
@@ -25,8 +26,7 @@ public class LeaveRequestManageController {
 
     @PostMapping("/submit")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<Response<String>> submitLeave(@Valid
-                                                        @RequestBody LeaveRequestDTO leaveRequestDto,
+    public ResponseEntity<Response<String>> submitLeave(@Valid @RequestBody LeaveRequestDTO leaveRequestDto,
                                                         Authentication authentication) {
 
         String email = authentication.getName();
@@ -97,6 +97,20 @@ public class LeaveRequestManageController {
                         .build()
         );
     }
-}
 
+    @GetMapping("/getPendingLeaveRequests")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Response<List<PendingLeaveRequestDTO>>> getPendingLeaveRequests() {
+        List<PendingLeaveRequestDTO> pendingRequests = leaveRequestService.findPendingRequest();
+
+        return ResponseEntity.ok(Response.<List<PendingLeaveRequestDTO>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Pending leave requests fetched successfully")
+                .data(pendingRequests)
+                .build()
+        );
+
+
+    }
+}
 
