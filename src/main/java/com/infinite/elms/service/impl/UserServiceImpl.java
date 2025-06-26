@@ -3,6 +3,9 @@ import com.infinite.elms.constants.LeaveType;
 import com.infinite.elms.dtos.UpdateEmployeeDTO;
 import com.infinite.elms.dtos.UserDTO;
 import com.infinite.elms.dtos.UserDetailsResponseDTO;
+import com.infinite.elms.exception.customException.EmailAlreadyExistsException;
+import com.infinite.elms.exception.customException.ResourceNotFoundException;
+import com.infinite.elms.exception.customException.RoleNotFoundException;
 import com.infinite.elms.models.LeaveBalance;
 import com.infinite.elms.models.LeavePolicy;
 import com.infinite.elms.models.Role;
@@ -17,9 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -37,14 +42,14 @@ public class UserServiceImpl implements UserService {
 
         if (usersRepository.existsByEmail(dto.getEmail())) {
             log.error("Email already in use: {}", dto.getEmail());
-            throw new RuntimeException("Email already in use");
+            throw new EmailAlreadyExistsException("Email already in use");
         }
 
         Role defaultRole = roleRepository.findByName("EMPLOYEE")
 
                 .orElseThrow(() ->
 
-                        new RuntimeException("Default role not found"));
+                        new RoleNotFoundException("Default role not found"));
 
         Users user = Users.builder()
                 .name(dto.getName())
@@ -60,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
         if (policies.isEmpty()) {
             log.error("Leave policies not found for year {}", currentYear);
-            throw new RuntimeException("Leave policies not configured for year " + currentYear);
+            throw new ResourceNotFoundException("Leave policies not configured for year " + currentYear);
         }
 
         Map<LeaveType, Integer> balanceMap = new HashMap<>();
@@ -89,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
         if (users.isEmpty()) {
             log.warn("No employees found in the system");
-            throw new RuntimeException("No employees found");
+            throw new ResourceNotFoundException("No employees found");
         }
 
         log.info("Fetched {} employees", users.size());
@@ -107,17 +112,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteEmployee(Long id) {
         Users user = usersRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
 
         log.info("Deleting user with ID: {}", id);
-        usersRepository.delete(user);  // Cascade and orphanRemoval will handle related entities
+        usersRepository.delete(user);
         log.info("User and related data deleted successfully for ID: {}", id);
     }
 
     @Override
     public UserDetailsResponseDTO getEmployeeById(Long id) {
         Users user = usersRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
 
         log.info("Fetched employee with ID: {}", id);
 
@@ -135,7 +140,7 @@ public class UserServiceImpl implements UserService {
         Users existingUser = usersRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Employee not found with ID: {}", id);
-                    return new RuntimeException("Employee not found with ID: " + id);
+                    return new ResourceNotFoundException("Employee not found with ID: " + id);
                 });
 
         if (dto.getName() != null && !dto.getName().isBlank()) {
@@ -146,7 +151,7 @@ public class UserServiceImpl implements UserService {
         if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
             if (!existingUser.getEmail().equals(dto.getEmail()) && usersRepository.existsByEmail(dto.getEmail())) {
                 log.error("Email already in use: {}", dto.getEmail());
-                throw new IllegalArgumentException("Email already in use: " + dto.getEmail());
+                throw new EmailAlreadyExistsException("Email already in use: " + dto.getEmail());
             }
             log.debug("Updating email to: {}", dto.getEmail());
             existingUser.setEmail(dto.getEmail());
@@ -157,7 +162,7 @@ public class UserServiceImpl implements UserService {
             Role role = roleRepository.findByName(dto.getRole())
                     .orElseThrow(() -> {
                         log.error("Role not found: {}", dto.getRole());
-                        return new RuntimeException("Role not found: " + dto.getRole());
+                        return new RoleNotFoundException("Role not found: " + dto.getRole());
                     });
             existingUser.setRole(role);
         }
@@ -177,5 +182,4 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 }
-
 

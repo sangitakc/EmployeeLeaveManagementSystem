@@ -1,5 +1,6 @@
 package com.infinite.elms.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.infinite.elms.constants.LeaveType;
 import com.infinite.elms.utils.Auditable;
 import jakarta.persistence.*;
@@ -8,13 +9,12 @@ import lombok.*;
 import java.util.Map;
 
 @Entity
-@Data
+@Table(name = "leave_balances")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Table(name = "leave_balances")
 @Builder
-public class LeaveBalance extends Auditable {
+@Data
+public class LeaveBalance{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,7 @@ public class LeaveBalance extends Auditable {
     @OneToOne
     @MapsId
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private Users user;
 
     @ElementCollection
@@ -31,5 +32,4 @@ public class LeaveBalance extends Auditable {
     @MapKeyColumn(name = "leave_type")
     @Column(name = "balance")
     private Map<LeaveType, Integer> balances;
-
 }

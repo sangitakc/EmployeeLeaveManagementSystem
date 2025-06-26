@@ -1,5 +1,5 @@
 package com.infinite.elms.exception;
-
+import com.infinite.elms.exception.customException.*;
 import com.infinite.elms.utils.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,17 +72,58 @@ public class GlobalExceptionHandler {
                         .data(errors)
                         .build());
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Response<Object>> handleAll(Exception ex) {
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Response<Object>> handleEmailExists(EmailAlreadyExistsException ex) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.CONFLICT)
                 .body(Response.builder()
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .message("An unexpected error occurred: " + ex.getMessage())
+                        .status(HttpStatus.CONFLICT.value())
+                        .message(ex.getMessage())
+                        .data(null)
+                        .build());
+    }
+
+    @ExceptionHandler(InsufficientLeaveBalanceException.class)
+    public ResponseEntity<Response<Object>> handleInsufficientLeave(InsufficientLeaveBalanceException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Response.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message(ex.getMessage())
+                        .data(null)
+                        .build());
+    }
+
+    @ExceptionHandler(LeaveRequestAlreadyReviewedException.class)
+    public ResponseEntity<Response<Object>> handleLeaveReviewed(LeaveRequestAlreadyReviewedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Response.builder()
+                        .status(HttpStatus.CONFLICT.value())
+                        .message(ex.getMessage())
+                        .data(null)
+                        .build());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Response<Object>> handleNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Response.builder()
+                        .status(HttpStatus.NOT_FOUND.value())
+                        .message(ex.getMessage())
+                        .data(null)
+                        .build());
+    }
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<Response<Object>> handleRoleNotFound(RoleNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Response.builder()
+                        .status(HttpStatus.NOT_FOUND.value())
+                        .message(ex.getMessage())
                         .data(null)
                         .build());
     }
 }
-
-
