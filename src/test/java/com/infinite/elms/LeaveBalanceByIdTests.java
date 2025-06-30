@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -26,33 +27,36 @@ public class LeaveBalanceByIdTests {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private AuthService authService;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ObjectMapper objectMapper;
 
-    private String employeeEmail = "employee4@example.com";
-    private String employeePassword = "Emp@123";
+    private final String employeeEmail = "employee4@example.com";
+    private final String employeePassword = "Emp@123";
     private Long employeeId;
     private String employeeToken;
 
     @BeforeEach
-    void setupUserIfNeeded() {
-        // Ensure employee is present
-        Users user = userRepository.findByEmail(employeeEmail).orElse(null);
-        if (user == null) {
+    void setupUserAndLogin() throws Exception {
+        String adminToken = authService.login("admin@leave.com", "Admin@123");
+
+        if (userRepository.findByEmail(employeeEmail).isEmpty()) {
             UserDTO employee = UserDTO.builder()
                     .name("Test Employee")
                     .email(employeeEmail)
                     .password(employeePassword)
                     .build();
 
-            authService.registerEmployee(employee); // Assuming this method exists and works
-            user = userRepository.findByEmail(employeeEmail).orElseThrow();
+            mockMvc.perform(post("/api/employee/register")
+                            .header("Authorization", "Bearer " + adminToken)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(employee)))
+                    .andExpect(status().isOk());
         }
 
-        employeeId = user.getId();
+        employeeId = userRepository.findByEmail(employeeEmail).orElseThrow().getId();
         employeeToken = authService.login(employeeEmail, employeePassword);
     }
 

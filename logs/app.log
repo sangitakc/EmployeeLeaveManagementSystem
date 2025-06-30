@@ -4741,3 +4741,10 @@ Caused by: org.hibernate.HibernateException: Unable to determine Dialect without
 2025-06-30T18:35:53.021+05:45  INFO 20624 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Starting LeaveBalanceByIdTests using Java 24.0.1 with PID 20624 (started by bipanas in D:\EmployeeLeaveManagementSystem)
 2025-06-30T18:35:53.023+05:45  INFO 20624 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : No active profile set, falling back to 1 default profile: "default"
 2025-06-30T18:35:59.880+05:45  INFO 20624 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Started LeaveBalanceByIdTests in 7.502 seconds (process running for 9.472)
+2025-06-30T18:56:00.221+05:45  INFO 14476 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Starting LeaveBalanceByIdTests using Java 24.0.1 with PID 14476 (started by bipanas in D:\EmployeeLeaveManagementSystem)
+2025-06-30T18:56:00.223+05:45  INFO 14476 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : No active profile set, falling back to 1 default profile: "default"
+2025-06-30T18:56:06.499+05:45  INFO 14476 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Started LeaveBalanceByIdTests in 6.94 seconds (process running for 8.947)
+2025-06-30T18:56:07.701+05:45  INFO 14476 --- [elms] [main] c.i.elms.controller.UserController       : Registering user with email: employee4@example.com
+2025-06-30T18:56:07.702+05:45  INFO 14476 --- [elms] [main] c.i.e.s.UserService.UserServiceImpl      : Registering user with email: employee4@example.com
+2025-06-30T18:56:07.949+05:45  INFO 14476 --- [elms] [main] c.i.e.s.UserService.UserServiceImpl      : User employee4@example.com registered successfully with initial leave balances
+2025-06-30T18:56:08.089+05:45  INFO 14476 --- [elms] [main] c.i.e.controller.LeaveBalanceController  : Request to get leave balance for user ID: 7
