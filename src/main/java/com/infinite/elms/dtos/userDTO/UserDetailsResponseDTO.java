@@ -1,4 +1,4 @@
-package com.infinite.elms.dtos;
+package com.infinite.elms.dtos.userDTO;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.infinite.elms.utils;
+package com.infinite.elms.utils.seeder;
 import com.infinite.elms.models.Role;
 import com.infinite.elms.models.Users;
 import com.infinite.elms.repositories.RoleRepository;
@@ -30,6 +30,7 @@ public class AdminSeeder implements CommandLineRunner {
                     .password(passwordEncoder.encode("Admin@123"))
                     .role(adminRole)
                     .build();
+
 
             usersRepository.save(admin);
         }

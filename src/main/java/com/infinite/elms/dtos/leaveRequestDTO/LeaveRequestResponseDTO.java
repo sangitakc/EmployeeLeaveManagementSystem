@@ -1,4 +1,4 @@
-package com.infinite.elms.dtos;
+package com.infinite.elms.dtos.leaveRequestDTO;
 import com.infinite.elms.constants.LeaveStatus;
 import com.infinite.elms.constants.LeaveType;
 import lombok.*;

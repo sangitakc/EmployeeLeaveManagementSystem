@@ -1,4 +1,4 @@
-package com.infinite.elms.utils;
+package com.infinite.elms.utils.seeder;
 
 import com.infinite.elms.models.Role;
 import com.infinite.elms.repositories.RoleRepository;

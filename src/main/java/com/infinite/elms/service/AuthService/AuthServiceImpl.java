@@ -1,7 +1,6 @@
-package com.infinite.elms.service.impl;
+package com.infinite.elms.service.AuthService;
 
 import com.infinite.elms.security.JwtUtil;
-import com.infinite.elms.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

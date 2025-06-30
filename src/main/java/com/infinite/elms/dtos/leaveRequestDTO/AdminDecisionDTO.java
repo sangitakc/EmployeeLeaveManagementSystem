@@ -1,7 +1,6 @@
-package com.infinite.elms.dtos;
+package com.infinite.elms.dtos.leaveRequestDTO;
 import com.infinite.elms.constants.LeaveStatus;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
