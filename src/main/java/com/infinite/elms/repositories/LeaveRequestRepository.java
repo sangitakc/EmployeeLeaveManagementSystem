@@ -12,11 +12,5 @@ import java.util.List;
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long> {
 
     List<LeaveRequest> getRequestByStatus(LeaveStatus leaveStatus);
-<<<<<<< HEAD
-    LeaveRequest findTopByEmployeeOrderByRequestDateDesc(Users employee);
-
-=======
-
-     List<LeaveRequest> findByEmployeeIdAndStatus(Long userId, LeaveStatus status);
->>>>>>> f1b45993fcf241265297b824fb589558963623a2
+    List<LeaveRequest> findByEmployeeIdAndStatus(Long userId, LeaveStatus status);
 }
