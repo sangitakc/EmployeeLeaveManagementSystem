@@ -17,16 +17,14 @@ import java.util.Map;
 public class LeaveBalance{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @OneToOne
     @MapsId
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private Users user;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "leave_balances_per_employee", joinColumns = @JoinColumn(name = "leave_balance_id"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "leave_type")

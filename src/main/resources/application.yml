@@ -30,6 +30,10 @@ logging:
   file:
     name: logs/app.log
   level:
-    root: INFO
-    com.infinite.elms: WARN
-    com.infinite.elms.controller: INFO
+    root: ERROR
+    com.infinite.elms: INFO
+  logback:
+    rolling policy:
+      max-file-size: 2MB
+      max-history: 3
+      total-size-cap: 10MB

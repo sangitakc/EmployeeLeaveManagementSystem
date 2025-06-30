@@ -1,10 +1,10 @@
 package com.infinite.elms.controller;
-import com.infinite.elms.dtos.LoginDTO;
-import com.infinite.elms.dtos.UpdateEmployeeDTO;
-import com.infinite.elms.dtos.UserDTO;
-import com.infinite.elms.dtos.UserDetailsResponseDTO;
-import com.infinite.elms.service.AuthService;
-import com.infinite.elms.service.UserService;
+import com.infinite.elms.dtos.userDTO.LoginDTO;
+import com.infinite.elms.dtos.userDTO.UpdateEmployeeDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
+import com.infinite.elms.dtos.userDTO.UserDetailsResponseDTO;
+import com.infinite.elms.service.AuthService.AuthService;
+import com.infinite.elms.service.UserService.UserService;
 import com.infinite.elms.utils.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 
@@ -39,6 +38,19 @@ public class UserController {
                         .data(message)
                         .build()
         );
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Response<String>> login(@Valid @RequestBody LoginDTO loginDTO) {
+        log.info("Authenticating user with email: {}", loginDTO.getEmail());
+        String token = authService.login(loginDTO.getEmail(), loginDTO.getPassword());
+        log.info("Authentication successful for user: {}", loginDTO.getEmail());
+
+        return ResponseEntity.ok(Response.<String>builder()
+                .status(HttpStatus.OK.value())
+                .message("Login successful")
+                .data(token)
+                .build());
     }
 
     @GetMapping("/employee/getAllEmployees")
@@ -101,18 +113,5 @@ public class UserController {
         );
     }
 
-
-    @PostMapping("/login")
-    public ResponseEntity<Response<String>> login(@Valid @RequestBody LoginDTO loginDTO) {
-        log.info("Authenticating user with email: {}", loginDTO.getEmail());
-        String token = authService.login(loginDTO.getEmail(), loginDTO.getPassword());
-        log.info("Authentication successful for user: {}", loginDTO.getEmail());
-
-        return ResponseEntity.ok(Response.<String>builder()
-                .status(HttpStatus.OK.value())
-                .message("Login successful")
-                .data(token)
-                .build());
-    }
 }
 

@@ -1,4 +1,4 @@
-package com.infinite.elms.service;
+package com.infinite.elms.service.AuthService;
 
 import org.springframework.stereotype.Component;
 
