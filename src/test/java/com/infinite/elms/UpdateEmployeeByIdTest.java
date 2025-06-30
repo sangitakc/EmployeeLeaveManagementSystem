@@ -2,9 +2,9 @@ package com.infinite.elms;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infinite.elms.dtos.LoginDTO;
-import com.infinite.elms.dtos.UpdateEmployeeDTO;
-import com.infinite.elms.dtos.UserDTO;
+import com.infinite.elms.dtos.userDTO.LoginDTO;
+import com.infinite.elms.dtos.userDTO.UpdateEmployeeDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
 import com.infinite.elms.models.Users;
 import com.infinite.elms.repositories.UserRepository;
 

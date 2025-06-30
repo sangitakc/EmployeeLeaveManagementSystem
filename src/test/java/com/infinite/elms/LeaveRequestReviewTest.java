@@ -2,10 +2,10 @@ package com.infinite.elms;
 
 import com.infinite.elms.constants.LeaveStatus;
 import com.infinite.elms.constants.LeaveType;
-import com.infinite.elms.dtos.AdminDecisionDTO;
-import com.infinite.elms.dtos.LeaveRequestDTO;
-import com.infinite.elms.dtos.LoginDTO;
-import com.infinite.elms.dtos.UserDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.AdminDecisionDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.LeaveRequestDTO;
+import com.infinite.elms.dtos.userDTO.LoginDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
 import com.infinite.elms.models.LeavePolicy;
 import com.infinite.elms.models.LeaveRequest;
 import com.infinite.elms.models.Users;

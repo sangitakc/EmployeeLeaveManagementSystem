@@ -4735,3 +4735,9 @@ Caused by: org.hibernate.HibernateException: Unable to determine Dialect without
 2025-06-30T10:26:12.110+05:45  INFO 28360 --- [elms] [main] com.infinite.elms.ElmsApplication        : No active profile set, falling back to 1 default profile: "default"
 2025-06-30T10:26:21.475+05:45  INFO 28360 --- [elms] [main] com.infinite.elms.ElmsApplication        : Started ElmsApplication in 10.554 seconds (process running for 33.331)
 >>>>>>> f1b45993fcf241265297b824fb589558963623a2
+2025-06-30T18:29:06.695+05:45  INFO 3588 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Starting LeaveBalanceByIdTests using Java 24.0.1 with PID 3588 (started by bipanas in D:\EmployeeLeaveManagementSystem)
+2025-06-30T18:29:06.698+05:45  INFO 3588 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : No active profile set, falling back to 1 default profile: "default"
+2025-06-30T18:29:14.165+05:45  INFO 3588 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Started LeaveBalanceByIdTests in 8.281 seconds (process running for 10.375)
+2025-06-30T18:35:53.021+05:45  INFO 20624 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Starting LeaveBalanceByIdTests using Java 24.0.1 with PID 20624 (started by bipanas in D:\EmployeeLeaveManagementSystem)
+2025-06-30T18:35:53.023+05:45  INFO 20624 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : No active profile set, falling back to 1 default profile: "default"
+2025-06-30T18:35:59.880+05:45  INFO 20624 --- [elms] [main] c.infinite.elms.LeaveBalanceByIdTests    : Started LeaveBalanceByIdTests in 7.502 seconds (process running for 9.472)

@@ -1,9 +1,9 @@
 package com.infinite.elms;
 
-import com.infinite.elms.dtos.UserDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
 import com.infinite.elms.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infinite.elms.service.AuthService;
+import com.infinite.elms.service.AuthService.AuthService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
