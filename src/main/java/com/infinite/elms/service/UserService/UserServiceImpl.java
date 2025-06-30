@@ -1,8 +1,8 @@
-package com.infinite.elms.service.impl;
+package com.infinite.elms.service.UserService;
 import com.infinite.elms.constants.LeaveType;
-import com.infinite.elms.dtos.UpdateEmployeeDTO;
-import com.infinite.elms.dtos.UserDTO;
-import com.infinite.elms.dtos.UserDetailsResponseDTO;
+import com.infinite.elms.dtos.userDTO.UpdateEmployeeDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
+import com.infinite.elms.dtos.userDTO.UserDetailsResponseDTO;
 import com.infinite.elms.exception.customException.EmailAlreadyExistsException;
 import com.infinite.elms.exception.customException.ResourceNotFoundException;
 import com.infinite.elms.exception.customException.RoleNotFoundException;
@@ -14,13 +14,11 @@ import com.infinite.elms.repositories.LeaveBalanceRepository;
 import com.infinite.elms.repositories.LeavePolicyRepository;
 import com.infinite.elms.repositories.RoleRepository;
 import com.infinite.elms.repositories.UserRepository;
-import com.infinite.elms.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +43,7 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistsException("Email already in use");
         }
 
-        Role defaultRole = roleRepository.findByName("EMPLOYEE")
-
-                .orElseThrow(() ->
-
-                        new RoleNotFoundException("Default role not found"));
+        Role defaultRole = roleRepository.findByName("EMPLOYEE").orElseThrow(() -> new RoleNotFoundException("Default role not found"));
 
         Users user = Users.builder()
                 .name(dto.getName())
@@ -110,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteEmployee(Long id) {
+    public void  deleteEmployee(Long id) {
         Users user = usersRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
 

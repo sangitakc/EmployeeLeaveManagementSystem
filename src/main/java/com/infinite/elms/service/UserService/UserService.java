@@ -1,8 +1,7 @@
-package com.infinite.elms.service;
-
-import com.infinite.elms.dtos.UpdateEmployeeDTO;
-import com.infinite.elms.dtos.UserDTO;
-import com.infinite.elms.dtos.UserDetailsResponseDTO;
+package com.infinite.elms.service.UserService;
+import com.infinite.elms.dtos.userDTO.UpdateEmployeeDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
+import com.infinite.elms.dtos.userDTO.UserDetailsResponseDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

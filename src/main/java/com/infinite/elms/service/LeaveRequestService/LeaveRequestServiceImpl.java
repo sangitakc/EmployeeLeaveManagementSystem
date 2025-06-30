@@ -1,9 +1,8 @@
-package com.infinite.elms.service.impl;
+package com.infinite.elms.service.LeaveRequestService;
 import com.infinite.elms.constants.LeaveStatus;
 import com.infinite.elms.constants.LeaveType;
-import com.infinite.elms.dtos.LeaveRequestDTO;
-import com.infinite.elms.dtos.LeaveRequestResponseDTO;
-import com.infinite.elms.dtos.PendingLeaveRequestDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.LeaveRequestDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.LeaveRequestResponseDTO;
 import com.infinite.elms.exception.customException.InsufficientLeaveBalanceException;
 import com.infinite.elms.exception.customException.LeaveRequestAlreadyReviewedException;
 import com.infinite.elms.exception.customException.ResourceNotFoundException;
@@ -13,18 +12,15 @@ import com.infinite.elms.models.Users;
 import com.infinite.elms.repositories.LeaveBalanceRepository;
 import com.infinite.elms.repositories.LeaveRequestRepository;
 import com.infinite.elms.repositories.UserRepository;
-import com.infinite.elms.service.LeaveRequestService;
+import com.infinite.elms.utils.ConvertToLeaveRequestResponseDTO;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +30,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     private final UserRepository userRepository;
     private final LeaveRequestRepository leaveRequestRepository;
     private final LeaveBalanceRepository leaveBalanceRepository;
+    private final ConvertToLeaveRequestResponseDTO convertToPendingLeaveDTOList;
 
     @Override
     public void submitLeaveRequest(String userEmail, LeaveRequestDTO dto) {
@@ -107,56 +104,27 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     public List<LeaveRequestResponseDTO> getAllLeaveRequests() {
         log.info("Fetching all leave requests from database");
         List<LeaveRequest> leaveRequests = leaveRequestRepository.findAll();
-
-        if (leaveRequests.isEmpty()) {
-            log.warn("No leave requests found");
-            return Collections.emptyList();
-        }
-
-        log.info("Found {} leave requests", leaveRequests.size());
-
-        return leaveRequests.stream()
-                .map(leaveRequest -> LeaveRequestResponseDTO.builder()
-                        .id(leaveRequest.getId())
-                        .startDate(leaveRequest.getStartDate())
-                        .endDate(leaveRequest.getEndDate())
-                        .status(leaveRequest.getStatus())
-                        .leaveType(leaveRequest.getLeaveType())
-                        .reason(leaveRequest.getReason())
-                        .employeeId(leaveRequest.getEmployee().getId())
-                        .employeeName(leaveRequest.getEmployee().getName())
-                        .requestDate(leaveRequest.getRequestDate())
-                        .decisionDate(leaveRequest.getDecisionDate())
-                        .approverId(leaveRequest.getApprover() != null ? leaveRequest.getApprover().getId() : null)
-                        .decisionComment(leaveRequest.getDecisionComment())
-                        .build())
-                .collect(Collectors.toList());
+        return  convertToPendingLeaveDTOList.convertToPendingLeaveDTOList(leaveRequests,"No Leave Requests Found");
     }
 
     @Override
-    public List<PendingLeaveRequestDTO> findPendingRequest() {
+    public List<LeaveRequestResponseDTO> findPendingRequest() {
         log.info("Fetching all pending leave requests");
 
         List<LeaveRequest> pendingRequests = leaveRequestRepository.getRequestByStatus(LeaveStatus.PENDING);
+        return  convertToPendingLeaveDTOList.convertToPendingLeaveDTOList(pendingRequests,"No pending leave requests found");
 
-        if (pendingRequests.isEmpty()) {
-            log.warn("No pending leave requests found");
-            return Collections.emptyList();
-        }
 
-        return pendingRequests.stream()
-                .map(req -> PendingLeaveRequestDTO.builder()
-                        .id(req.getId())
-                        .startDate(req.getStartDate())
-                        .endDate(req.getEndDate())
-                        .status(req.getStatus())
-                        .leaveType(req.getLeaveType())
-                        .reason(req.getReason())
-                        .employeeId(req.getEmployee().getId())
-                        .employeeName(req.getEmployee().getName())
-                        .requestDate(req.getRequestDate())
-                        .build())
-                .toList();
+    }
+
+    @Override
+    public List<LeaveRequestResponseDTO> findPendingRequestByUserId(Long userId) {
+        log.info("Fetching pending leave requests By id {}", userId);
+        List<LeaveRequest>  pendingRequests= leaveRequestRepository.findByEmployeeIdAndStatus(userId,LeaveStatus.PENDING);
+        return  convertToPendingLeaveDTOList.convertToPendingLeaveDTOList(pendingRequests,"No pending leave requests found for userId " + userId);
+
     }
 }
+
+
 

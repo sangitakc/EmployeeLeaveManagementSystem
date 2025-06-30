@@ -44,11 +44,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //If token is not missing, invalid, or expired
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtUtil.validateToken(token, userDetails)) {
+                //create Authenticated object
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                //Attaches extra details to the authentication object
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                //the user is considered "logged in" for this request cycle
                 SecurityContextHolder.getContext().setAuthentication(authToken);
                 log.debug("JWT authenticated user: {}", userEmail);
             }

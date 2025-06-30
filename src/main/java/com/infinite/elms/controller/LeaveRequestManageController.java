@@ -1,9 +1,8 @@
 package com.infinite.elms.controller;
-import com.infinite.elms.dtos.AdminDecisionDTO;
-import com.infinite.elms.dtos.LeaveRequestDTO;
-import com.infinite.elms.dtos.LeaveRequestResponseDTO;
-import com.infinite.elms.dtos.PendingLeaveRequestDTO;
-import com.infinite.elms.service.LeaveRequestService;
+import com.infinite.elms.dtos.leaveRequestDTO.AdminDecisionDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.LeaveRequestDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.LeaveRequestResponseDTO;
+import com.infinite.elms.service.LeaveRequestService.LeaveRequestService;
 import com.infinite.elms.utils.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -100,10 +99,10 @@ public class LeaveRequestManageController {
 
     @GetMapping("/getPendingLeaveRequests")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Response<List<PendingLeaveRequestDTO>>> getPendingLeaveRequests() {
-        List<PendingLeaveRequestDTO> pendingRequests = leaveRequestService.findPendingRequest();
+    public ResponseEntity<Response<List<LeaveRequestResponseDTO>>> getPendingLeaveRequests() {
+        List<LeaveRequestResponseDTO> pendingRequests = leaveRequestService.findPendingRequest();
 
-        return ResponseEntity.ok(Response.<List<PendingLeaveRequestDTO>>builder()
+        return ResponseEntity.ok(Response.<List<LeaveRequestResponseDTO>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Pending leave requests fetched successfully")
                 .data(pendingRequests)
@@ -112,5 +111,23 @@ public class LeaveRequestManageController {
 
 
     }
+
+    @GetMapping("/getPendingLeaveRequestsByUserId/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
+    public ResponseEntity<Response<List<LeaveRequestResponseDTO>>> getPendingLeaveRequestsByUserId(@PathVariable Long userId) {
+        log.info("Fetching pending leave requests for user ID: {}", userId);
+
+        List<LeaveRequestResponseDTO> pendingRequests = leaveRequestService.findPendingRequestByUserId(userId);
+
+        return ResponseEntity.ok(
+                Response.<List<LeaveRequestResponseDTO>>builder()
+                        .status(HttpStatus.OK.value())
+                        .message("Pending leave requests fetched successfully for user ID: " + userId)
+                        .data(pendingRequests)
+                        .build()
+        );
+    }
+
+
 }
 

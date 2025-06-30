@@ -24,6 +24,8 @@ public class GlobalExceptionHandler {
                         .data(null)
                         .build());
     }
+
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Response<String>> handleInvalidJson(HttpMessageNotReadableException ex) {
         return ResponseEntity

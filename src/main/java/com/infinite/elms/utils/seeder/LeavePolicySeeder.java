@@ -1,4 +1,4 @@
-package com.infinite.elms.utils;
+package com.infinite.elms.utils.seeder;
 
 import com.infinite.elms.constants.LeaveType;
 import com.infinite.elms.models.LeavePolicy;
