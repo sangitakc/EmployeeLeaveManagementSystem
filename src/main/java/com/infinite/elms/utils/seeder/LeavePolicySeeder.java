@@ -26,7 +26,7 @@ public class LeavePolicySeeder implements CommandLineRunner {
                 new LeavePolicy(null, LeaveType.SICK_LEAVE, 10, year),
                 new LeavePolicy(null, LeaveType.CASUAL_LEAVE, 12, year),
                 new LeavePolicy(null, LeaveType.PAID_LEAVE, 15, year),
-                new LeavePolicy(null, LeaveType.UNPAID_LEAVE, 9999, year),
+                new LeavePolicy(null, LeaveType.UNPAID_LEAVE, 200, year),
                 new LeavePolicy(null, LeaveType.MATERNITY_LEAVE, 90, year)
         );
 

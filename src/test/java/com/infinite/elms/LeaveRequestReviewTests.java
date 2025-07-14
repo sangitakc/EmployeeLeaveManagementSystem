@@ -2,9 +2,9 @@ package com.infinite.elms;
 
 import com.infinite.elms.constants.LeaveStatus;
 import com.infinite.elms.constants.LeaveType;
-import com.infinite.elms.dtos.AdminDecisionDTO;
-import com.infinite.elms.dtos.LeaveRequestDTO;
-import com.infinite.elms.dtos.UserDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.AdminDecisionDTO;
+import com.infinite.elms.dtos.leaveRequestDTO.LeaveRequestDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
 import com.infinite.elms.models.LeavePolicy;
 import com.infinite.elms.models.LeaveRequest;
 import com.infinite.elms.models.Users;
@@ -12,7 +12,7 @@ import com.infinite.elms.repositories.LeavePolicyRepository;
 import com.infinite.elms.repositories.LeaveRequestRepository;
 import com.infinite.elms.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infinite.elms.service.AuthService;
+import com.infinite.elms.service.AuthService.AuthService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -106,7 +106,11 @@ public class LeaveRequestReviewTests {
 
         // Admin reviews and approves the request
         Users employeeEntity = userRepository.findByEmail(employeeEmail).orElseThrow();
-        LeaveRequest latestRequest = leaveRequestRepository.findTopByEmployeeOrderByRequestDateDesc(employeeEntity);
+        LeaveRequest latestRequest = leaveRequestRepository
+                .findByEmployeeIdAndStatus(employeeEntity.getId(), LeaveStatus.PENDING)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No pending leave request found."));
         assertNotNull(latestRequest, "No leave request found for the employee.");
 
 //        Admin approval
@@ -134,5 +138,3 @@ public class LeaveRequestReviewTests {
         System.out.println("Cleaned up employee with email: " + email);
     }
 }
-
-

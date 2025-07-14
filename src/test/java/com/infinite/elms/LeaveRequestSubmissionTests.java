@@ -1,12 +1,10 @@
 package com.infinite.elms;
-
-
 import com.infinite.elms.constants.LeaveType;
-import com.infinite.elms.dtos.LeaveRequestDTO;
-import com.infinite.elms.dtos.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.infinite.elms.dtos.leaveRequestDTO.LeaveRequestDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
 import com.infinite.elms.repositories.UserRepository;
-import com.infinite.elms.service.AuthService;
+import com.infinite.elms.service.AuthService.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.time.LocalDate;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

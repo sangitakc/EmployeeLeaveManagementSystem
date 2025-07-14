@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/employee/**").hasRole("ADMIN")
                         .requestMatchers("/api/leaveRequest/submit").hasRole("EMPLOYEE")
                         .requestMatchers("/api/leaveRequest/review/**").hasRole("ADMIN")
+                        .requestMatchers("/api/leaveBalance/getLeaveBalance").hasRole("ADMIN")
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -52,8 +52,6 @@ public class UserServiceImpl implements UserService {
                 .role(defaultRole)
                 .build();
 
-        //
-
         int currentYear = LocalDate.now().getYear();
         List<LeavePolicy> policies = leavePolicyRepository.findByPolicyYear(currentYear);
 

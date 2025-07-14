@@ -1,12 +1,10 @@
 package com.infinite.elms;
-
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infinite.elms.dtos.LoginDTO;
-import com.infinite.elms.dtos.UserDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
 import com.infinite.elms.models.Users;
 import com.infinite.elms.repositories.UserRepository;
 
+import com.infinite.elms.service.AuthService.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -29,6 +26,7 @@ public class DeleteEmployeeByIdTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private UserRepository userRepository;
+    @Autowired private AuthService authService;
 
     private static final String ADMIN_EMAIL = "admin@leave.com";
     private static final String ADMIN_PASSWORD = "Admin@123";
@@ -43,11 +41,8 @@ public class DeleteEmployeeByIdTest {
 
     @Test
     void adminCanDeleteEmployeeById() throws Exception {
-        // Step 1: Authenticate admin
-        String jwt = obtainJwtToken();
-        assertNotNull(jwt);
+        String jwtToken= authService.login(ADMIN_EMAIL,ADMIN_PASSWORD);
 
-        // Step 2: Register employee to be deleted
         UserDTO employeeToDelete = UserDTO.builder()
                 .name("Delete Test")
                 .email(EMPLOYEE_EMAIL)
@@ -55,37 +50,20 @@ public class DeleteEmployeeByIdTest {
                 .build();
 
         mockMvc.perform(post("/api/employee/register")
-                        .header("Authorization", "Bearer " + jwt)
+                        .header("Authorization", "Bearer " + jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(employeeToDelete)))
                 .andExpect(status().isOk());
 
-        // Step 3: Fetch employee ID from DB
         Users savedEmployee = userRepository.findByEmail(EMPLOYEE_EMAIL)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
         Long employeeId = savedEmployee.getId();
         assertNotNull(employeeId);
 
-        // Step 4: Perform DELETE
         mockMvc.perform(delete("/api/employee/deleteEmployee/" + employeeId)
-                        .header("Authorization", "Bearer " + jwt))
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Employee deleted successfully"));
     }
-
-    private String obtainJwtToken() throws Exception {
-        LoginDTO login = new LoginDTO();
-        login.setEmail(ADMIN_EMAIL);
-        login.setPassword(ADMIN_PASSWORD);
-
-        MvcResult result = mockMvc.perform(post("/api/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(login)))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String json = result.getResponse().getContentAsString();
-        JsonNode root = objectMapper.readTree(json);
-        return root.path("data").asText();
-    }
 }
+

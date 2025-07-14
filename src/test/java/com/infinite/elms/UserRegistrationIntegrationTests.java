@@ -1,9 +1,8 @@
 package com.infinite.elms;
-
-import com.infinite.elms.dtos.UserDTO;
+import com.infinite.elms.dtos.userDTO.UserDTO;
 import com.infinite.elms.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infinite.elms.service.AuthService;
+import com.infinite.elms.service.AuthService.AuthService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +35,13 @@ class UserRegistrationIntegrationTests {
 
     @Test
     void adminCanRegisterEmployeeUsingJwt() throws Exception {
-        // Step 1: Admin login to obtain token
         String jwtToken = authService.login(ADMIN_EMAIL, ADMIN_PASSWORD);
 
-        // Step 2: Skip registration if employee already exists
         if (userRepository.existsByEmail(TEST_EMPLOYEE_EMAIL)) {
             System.out.println("Test employee already exists. Skipping registration.");
             return;
         }
 
-        // Step 3: Register employee
         UserDTO employee = UserDTO.builder()
                 .name("Test Employee")
                 .email(TEST_EMPLOYEE_EMAIL)
