@@ -38,7 +38,8 @@ public class GetAllLeaveRequestTests {
         // Step 2: Fetch leave requests
         MvcResult result = mockMvc.perform(get("/api/leaveRequest/getAllLeaveRequest")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON
+                        ))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").exists())
                 .andReturn();

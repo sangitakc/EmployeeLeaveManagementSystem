@@ -105,8 +105,16 @@ public class LeaveRequestReviewTests {
         System.out.println("Submit Response: " + submitResult.getResponse().getContentAsString());
 
         // Admin reviews and approves the request
+//        Users employeeEntity = userRepository.findByEmail(employeeEmail).orElseThrow();
+//        LeaveRequest latestRequest = leaveRequestRepository.findTopByEmployeeOrderByRequestDateDesc(employeeEntity);
+//        assertNotNull(latestRequest, "No leave request found for the employee.");
+        // Admin reviews and approves the request
         Users employeeEntity = userRepository.findByEmail(employeeEmail).orElseThrow();
-        LeaveRequest latestRequest = leaveRequestRepository.findTopByEmployeeOrderByRequestDateDesc(employeeEntity);
+        LeaveRequest latestRequest = leaveRequestRepository
+                .findByEmployeeIdAndStatus(employeeEntity.getId(), LeaveStatus.PENDING)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No pending leave request found."));
         assertNotNull(latestRequest, "No leave request found for the employee.");
 
 //        Admin approval
